@@ -1,0 +1,4 @@
+.env
+error_logs.txt
+.pytest_cache/
+**/__pycache__
