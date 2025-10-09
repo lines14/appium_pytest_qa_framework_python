@@ -19,7 +19,9 @@ def driver():
         "ensureWebviewsHavePages": True,
         "nativeWebScreenshot": True,
         "newCommandTimeout": 3600,
-        "connectHardwareKeyboard": True
+        "connectHardwareKeyboard": True,
+        "appium:chromedriverAutodownload": True,
+        "appium:autoWebview": False
     })
 
     driver = webdriver.Remote("http://172.25.48.1:4723", options=options)
