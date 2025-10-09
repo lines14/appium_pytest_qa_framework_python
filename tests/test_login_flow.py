@@ -31,28 +31,27 @@ def test_forgot_password_disabled_button(driver):
     wait = WebDriverWait(driver, 15)
 
     allow_btn = wait.until(
-        EC.presence_of_element_located((AppiumBy.XPATH, "//*[@text='Allow']"))
+        EC.visibility_of_element_located((AppiumBy.XPATH, "//*[@text='Allow']"))
     )
     allow_btn.click()
 
     login_btn = wait.until(
-        EC.presence_of_element_located((AppiumBy.XPATH, "//android.widget.Button[@text='Вход']"))
+        EC.visibility_of_element_located((AppiumBy.XPATH, "//android.widget.Button[@text='Вход']"))
     )
     login_btn.click()
+
+    email_btn = wait.until(
+        EC.visibility_of_element_located((AppiumBy.XPATH, '//android.widget.Button[@text="По email"]'))
+    )
+    email_btn.click()
+
+    forgot_btn = wait.until(
+        EC.visibility_of_element_located((AppiumBy.XPATH, "//android.widget.TextView[@text='Забыли пароль?']"))
+    )
+    forgot_btn.click()
 
     webview_context = next(ctx for ctx in driver.contexts if "WEBVIEW" in ctx)
     driver.switch_to.context(webview_context)
 
-    driver.execute_script("""
-        const btn = [...document.querySelectorAll('button')]
-            .find(el => el.innerText.trim() === 'По email');
-        if (btn) btn.click();
-    """)
-
-    driver.switch_to.context("NATIVE_APP")
-    forgot_btn = driver.find_element(AppiumBy.XPATH, "//android.widget.TextView[@text='Забыли пароль?']")
-    forgot_btn.click()
-
-    driver.switch_to.context(webview_context)
     send_code_btn = driver.find_element(AppiumBy.XPATH, "//button[contains(., 'Выслать код')]")
-    assert not send_code_btn.is_enabled(), "Ожидалось, что кнопка 'Выслать код' будет неактивной при пустом email"
+    assert not send_code_btn.is_enabled(), "Кнопка 'Выслать код' неактивна при пустом email"
