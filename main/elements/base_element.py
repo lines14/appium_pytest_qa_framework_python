@@ -1,7 +1,7 @@
 from main.utils.log.logger import Logger
 from selenium.webdriver.common.keys import Keys
 from main.utils.wait.wait_utils import WaitUtils
-from main.driver.driver_factory import BrowserFactory
+from main.driver.driver_factory import DriverFactory
 
 class BaseElement:
     def __init__(self, locator_type, element_locator, element_name):
@@ -10,10 +10,10 @@ class BaseElement:
         self.element_name = element_name
 
     def get_element(self):
-        return BrowserFactory.instance.find_element(self.locator_type, self.element_locator)
+        return DriverFactory.instance.find_element(self.locator_type, self.element_locator)
 
     def get_elements(self):
-        return BrowserFactory.instance.find_elements(self.locator_type, self.element_locator)
+        return DriverFactory.instance.find_elements(self.locator_type, self.element_locator)
 
     def get_text(self):
         Logger.log(f'[info] ▶ get {self.element_name} text:')
@@ -27,9 +27,11 @@ class BaseElement:
 
     def input_text(self, text):
         Logger.log(f'[info] ▶ input {self.element_name}')
-        (self.get_element()).send_keys(text)
+        element = self.get_element()
+        element.clear()
+        element.send_keys(text)
 
-    def enter_text(self, text):
+    def enter_text_in_webview(self, text):
         Logger.log(f'[info] ▶ input {self.element_name} and submit')
         (self.get_element()).send_keys(text + Keys.ENTER)
 
@@ -52,6 +54,10 @@ class BaseElement:
 
     def parse_children_for_text(self):
         return list(map(lambda element: element.text, self.get_elements()))
+
+    def wait_is_located(self):
+        Logger.log(f'[info] ▶ wait {self.element_name} is located')
+        WaitUtils.wait_element_located(self.locator_type, self.element_locator)
 
     def wait_is_visible(self):
         Logger.log(f'[info] ▶ wait {self.element_name} is visible')

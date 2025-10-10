@@ -1,6 +1,7 @@
 from datetime import datetime
-time_list = []
+
 log_list = []
+time_list = []
 
 class Logger:
     @staticmethod

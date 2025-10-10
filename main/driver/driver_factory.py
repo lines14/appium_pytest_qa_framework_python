@@ -1,28 +1,23 @@
 import classutilities
-from selenium import webdriver
-from main.utils.data.config_manager import ConfigManager
+from config import Config
+from appium import webdriver
+from appium.options.common import AppiumOptions
+from main.utils.data.data_utils import DataUtils
 
-class BrowserFactory(classutilities.ClassPropertiesMixin):
+class DriverFactory(classutilities.ClassPropertiesMixin):
     __instance = None
 
     @classmethod
     def init_instance(cls):
         if (cls.__instance is None):
-            if (ConfigManager.get_config_data().browser == 'chrome'):
-                options = webdriver.ChromeOptions()
-                options.add_argument('--incognito')
-                cls.__instance = webdriver.Chrome(options=options)
+            options = AppiumOptions()
 
-                if (ConfigManager.get_config_data().is_maximize):
-                    cls.__instance.maximize_window()
+            if (Config().PLATFORM_NAME == 'Android'):
+                options.load_capabilities(DataUtils.model_to_dict(Config().ANDROID_CAPABILITIES))
+            elif (Config().PLATFORM_NAME == 'iOS'):
+                options.load_capabilities(DataUtils.model_to_dict(Config().IOS_CAPABILITIES))
 
-            elif (ConfigManager.get_config_data().browser == 'firefox'):
-                options = webdriver.FirefoxOptions()
-                options.add_argument('-private')
-                cls.__instance = webdriver.Firefox(options=options)
-
-                if (ConfigManager.get_config_data().is_maximize):
-                    cls.__instance.maximize_window()
+            cls.__instance = webdriver.Remote(Config().APPIUM_URL, options=options)
 
     @classutilities.classproperty
     def instance(cls):

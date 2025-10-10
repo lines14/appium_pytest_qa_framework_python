@@ -1,4 +1,4 @@
-.env
-error_logs.txt
+.idea
+.env.test
 .pytest_cache/
 **/__pycache__

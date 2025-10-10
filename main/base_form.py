@@ -1,6 +1,6 @@
 from main.utils.log.logger import Logger
 from main.utils.wait.wait_utils import WaitUtils
-from main.driver.driver_factory import BrowserFactory
+from main.driver.driver_factory import DriverFactory
 
 class BaseForm:
     def __init__(self, locator_type, page_locator, page_name):
@@ -9,7 +9,7 @@ class BaseForm:
         self.page_name = page_name
 
     def get_unique_element(self):
-        return BrowserFactory.instance.find_element(self.locator_type, self.page_locator)
+        return DriverFactory.instance.find_element(self.locator_type, self.page_locator)
 
     def page_is_displayed(self):
         Logger.log(f'[info] ▶ {self.page_name} is open')
@@ -20,7 +20,9 @@ class BaseForm:
         return (self.get_unique_element()).is_enabled()
     
     def wait_page_is_visible(self):
+        Logger.log(f'[info] ▶ wait {self.page_name} is visible')
         WaitUtils.wait_element_visible(self.locator_type, self.page_locator)
     
     def wait_page_is_clickable(self):
+        Logger.log(f'[info] ▶ wait {self.page_name} is clickable')
         WaitUtils.wait_element_clickable(self.locator_type, self.page_locator)

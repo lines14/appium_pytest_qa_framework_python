@@ -1,4 +1,6 @@
 {
-    "posts": "/posts",
-    "users": "/users"
+    "auth": {
+        "login": "api/login",
+        "temp_users": "api/auth/temp-users"
+    }
 }
