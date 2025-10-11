@@ -29,8 +29,6 @@ class AuthAPI(BaseAPI):
         if response.is_success:
             AuthAPI._token = DataUtils.dict_to_model(response.json()).data.access_token
             AuthAPI._headers = {'Authorization': f'Bearer {AuthAPI._token}'}
-            self.client.headers.update(AuthAPI._headers)
-        return response
 
     async def get_temp_user(self, user_id):
         return await self.get(f"{JSONLoader.API_endpoints.auth.temp_users}/{user_id}")
