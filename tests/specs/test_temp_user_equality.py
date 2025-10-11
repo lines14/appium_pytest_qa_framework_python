@@ -8,11 +8,10 @@ from assertions import assert_, assert_response_status, assert_json, assert_trut
 
 
 class TestTempUserEquality:
-    auth_API = AuthAPI()
-
     @pytest.mark.asyncio
     async def test_temp_user_equality(self):
-        response = await self.auth_API.get_temp_user(353)
+        response = await AuthAPI().get_temp_user(JSONLoader.test_data.temp_user_ID)
+        print(response.json())
 
         # assert_response_status(response.status_code, HTTPStatus.OK)
         # assert_truth(DataUtils.is_JSON(response.json()), 'response is json')

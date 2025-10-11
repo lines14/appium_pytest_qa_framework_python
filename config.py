@@ -12,6 +12,8 @@ class Config(BaseSettings):
     APPIUM_HOST: str
     APPIUM_PORT: int
 
+    AUTH_LOGIN: str
+    AUTH_PASSWORD: str
     API_BASE_URL: str
     WAIT_TIME: int
 
@@ -54,6 +56,13 @@ class Config(BaseSettings):
     @property
     def APPIUM_URL(self) -> str:
         return f"http://{self.APPIUM_HOST}:{self.APPIUM_PORT}"
+
+    @property
+    def USER(self):
+        return SimpleNamespace(
+            login=self.AUTH_LOGIN,
+            password=self.AUTH_PASSWORD,
+        )
     
     @property
     def ANDROID_CAPABILITIES(self):

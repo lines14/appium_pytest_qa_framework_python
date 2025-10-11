@@ -1,4 +1,5 @@
 import pytest
+from tests.API.auth_API import AuthAPI
 from main.utils.DB.base_DB import BaseDB
 from main.utils.log.logger import Logger
 from main.driver.driver_utils import DriverUtils
@@ -8,6 +9,7 @@ from main.driver.driver_utils import DriverUtils
 async def setup_and_teardown():
     base_DB = BaseDB()
     await base_DB.init_tables()
+    await AuthAPI().set_token()
     # DriverUtils.init_the_driver()
 
     yield
