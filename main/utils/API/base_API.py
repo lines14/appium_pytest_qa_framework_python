@@ -3,7 +3,7 @@ from main.utils.log.logger import Logger
 
 class BaseAPI:
     def __init__(self, base_URL, log_string, timeout=None, headers=None):
-        Logger.log(f'{log_string or '[info] ▶ set base API URL'} {base_URL}')
+        Logger.log(f"{log_string or '[info] ▶ set base API URL'} {base_URL}")
         self.__client = httpx.AsyncClient(
             base_url=base_URL,
             headers=headers,

@@ -1,4 +1,4 @@
-from main.base_form import BaseForm
+from main.base_screen import BaseForm
 from selenium.webdriver.common.by import By
 from main.elements.base_element_children.button import Button
 

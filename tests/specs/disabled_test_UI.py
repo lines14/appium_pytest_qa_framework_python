@@ -1,5 +1,5 @@
 from assertions import assert_truth
-from main.base_test import BaseTest
+from conftest import BaseTest
 from main.utils.data.JSON_loader import JSONLoader
 from main.driver.driver_utils import DriverUtils
 from tests.page_objects.main_page import MainPage

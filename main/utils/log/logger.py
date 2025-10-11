@@ -13,7 +13,7 @@ class Logger:
     @staticmethod
     def log_to_file():
         summary_list = list(zip(time_list, log_list))
-        with open('../../../tests/log.txt', 'w', encoding='utf-8') as data:
+        with open('../../../artifacts/log.txt', 'w', encoding='utf-8') as data:
             for item in summary_list:
                 data.write(f'{item[0]}{item[1]}')
 

@@ -79,6 +79,7 @@ class DriverUtils:
         Logger.log('[info] ▶ close tab')
         DriverFactory.instance.close()
 
+    @staticmethod
     def tap(self):
         Logger.log(f'[info] ▶ tap {self.element_name}')
         TouchAction(DriverFactory.instance).tap(self.get_element()).perform()
