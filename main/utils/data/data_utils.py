@@ -1,10 +1,9 @@
 import json
-from main.utils.log.logger import Logger
+from assertions import assert_json
 
 class DataUtils:
     @staticmethod
     def is_JSON(API_response):
-        Logger.log('[info] ▶ check API response is JSON')
         if type(API_response) == list:
             return type(API_response.pop()) == dict
         else:
@@ -23,3 +22,13 @@ class DataUtils:
     @classmethod
     def dict_to_model(cls, dict):
         return json.loads(json.dumps(dict, ensure_ascii=False), object_hook=cls.nested_data_to_models)
+    
+    def assert_json(actual: dict, expected: dict, excluded_fields=None):
+        excluded_fields = set(excluded_fields or [])
+
+        def _filter(data):
+            return {key: value for key, value in data.items() if key not in excluded_fields}
+
+        actual_filtered = _filter(actual)
+        expected_filtered = _filter(expected)
+        assert_json(actual_filtered, expected_filtered)

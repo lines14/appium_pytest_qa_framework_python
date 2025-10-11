@@ -2,12 +2,19 @@ import re
 from typing import Optional
 from sqlalchemy import func
 from typing import Union, Any
+from pydantic import ConfigDict
 from datetime import datetime, timezone
 from sqlalchemy.orm import declared_attr
 from main.utils.DB.base_DB import BaseDB
 from sqlmodel import SQLModel, TIMESTAMP, Field
 
 class BaseModel(SQLModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        validate_assignment=True,
+        arbitrary_types_allowed=True
+    )
+    
     id: int = Field(primary_key=True, nullable=False)
 
     created_at: datetime = Field(
@@ -135,8 +142,3 @@ class BaseModel(SQLModel):
 
         else:
             return obj
-    
-    class Config:
-        from_attributes = True
-        validate_assignment = True
-        arbitrary_types_allowed=True
