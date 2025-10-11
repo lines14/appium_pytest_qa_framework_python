@@ -11,9 +11,10 @@ class TestTempUserEquality:
     @pytest.mark.asyncio
     async def test_temp_user_equality(self):
         response = await AuthAPI().get_temp_user(JSONLoader.test_data.temp_user_ID)
-        print(response.json())
+        assert_response_status(response.status_code, HTTPStatus.OK)
+        assert_truth(DataUtils.is_JSON(response.json()), 'response is JSON')
 
-        # assert_response_status(response.status_code, HTTPStatus.OK)
-        # assert_truth(DataUtils.is_JSON(response.json()), 'response is json')
+        
+
+        # assert_(len(response), 48, 'author data contains 48 fields', Operators.EQUAL)
         # assert_json(response.json(), JSONLoader.test_data.resourceToCompare)
-        # assert_(len(response), 4, 'author data contains four fields', Operators.EQUAL)
