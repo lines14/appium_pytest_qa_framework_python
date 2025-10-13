@@ -10,8 +10,6 @@ class TestRestorePassword:
         login_screen = LoginScreen()
         forgot_password_screen = ForgotPasswordScreen()
 
-        start_screen.wait_allow_notifications_button_visible()
-        start_screen.click_allow_notifications_button()
         start_screen.wait_screen_is_visible()
 
         start_screen.click_login_button()
