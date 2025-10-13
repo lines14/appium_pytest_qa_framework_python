@@ -41,11 +41,11 @@ class BaseElement:
         Logger.log(f'[info]   attribute value is: "{attr_value}"')
         return attr_value
 
-    def element_is_displayed(self):
+    def check_element_is_displayed(self):
         Logger.log(f'[info] ▶ {self.element_name} is present')
         return (self.get_element()).is_displayed()
 
-    def element_is_enabled(self):
+    def check_element_is_enabled(self):
         Logger.log(f'[info] ▶ {self.element_name} is enable')
         return (self.get_element()).is_enabled()
 
@@ -55,18 +55,18 @@ class BaseElement:
     def parse_children_for_text(self):
         return list(map(lambda element: element.text, self.get_elements()))
 
-    def wait_is_located(self):
+    def wait_element_is_located(self):
         Logger.log(f'[info] ▶ wait {self.element_name} is located')
         WaitUtils.wait_element_located(self.locator_type, self.element_locator)
 
-    def wait_is_visible(self):
+    def wait_element_is_visible(self):
         Logger.log(f'[info] ▶ wait {self.element_name} is visible')
         WaitUtils.wait_element_visible(self.locator_type, self.element_locator)
 
-    def wait_staleness_of(self):
+    def wait_staleness_of_element(self):
         WaitUtils.wait_element_staleness_of(self.locator_type, self.element_locator)
     
-    def wait_is_clickable(self):
+    def wait_element_is_clickable(self):
         Logger.log(f'[info] ▶ wait {self.element_name} is clickable')
         WaitUtils.wait_element_clickable(self.locator_type, self.element_locator)
         

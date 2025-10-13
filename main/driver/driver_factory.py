@@ -11,7 +11,6 @@ class DriverFactory(classutilities.ClassPropertiesMixin):
     def init_instance(cls):
         if (cls.__instance is None):
             options = AppiumOptions()
-
             if (Config().PLATFORM_NAME == 'Android'):
                 options.load_capabilities(DataUtils.model_to_dict(Config().ANDROID_CAPABILITIES))
             elif (Config().PLATFORM_NAME == 'iOS'):

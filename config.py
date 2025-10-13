@@ -17,6 +17,7 @@ class Config(BaseSettings):
     API_BASE_URL: str
     WAIT_TIME: int
 
+    APP: str
     PLATFORM_NAME: str
     DEVICE_NAME: str
     AUTOMATION_NAME: str
@@ -67,6 +68,7 @@ class Config(BaseSettings):
     @property
     def ANDROID_CAPABILITIES(self):
         instance = SimpleNamespace(
+            app=self.APP,
             platformName=self.PLATFORM_NAME,
             deviceName=self.DEVICE_NAME,
             automationName=self.AUTOMATION_NAME,
@@ -80,6 +82,8 @@ class Config(BaseSettings):
             nativeWebScreenshot=self.NATIVE_WEB_SCREENSHOT
         )
 
+        # setattr(instance, "appium:autoGrantPermissions", True)
+        # setattr(instance, "appium:fullReset", False)
         setattr(instance, 'appium:autoWebview', self.AUTO_WEBVIEW)
         setattr(instance, 'appium:chromedriverAutodownload', self.CHROMEDRIVER_AUTODOWNLOAD)
         return instance
@@ -87,6 +91,7 @@ class Config(BaseSettings):
     @property
     def IOS_CAPABILITIES(self):
         instance = SimpleNamespace(
+            app=self.APP,
             platformName=self.PLATFORM_NAME,
             deviceName=self.DEVICE_NAME,
             automationName=self.AUTOMATION_NAME,
@@ -105,5 +110,6 @@ class Config(BaseSettings):
             showXcodeLog=self.SHOW_XCODE_LOG
         )
 
+        # setattr(instance, "appium:fullReset", True)
         setattr(instance, 'appium:autoWebview', self.AUTO_WEBVIEW)
         return instance

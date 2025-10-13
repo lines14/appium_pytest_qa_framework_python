@@ -11,11 +11,11 @@ class BaseScreen:
     def get_unique_element(self):
         return DriverFactory.instance.find_element(self.locator_type, self.screen_locator)
 
-    def screen_is_displayed(self):
+    def check_screen_is_displayed(self):
         Logger.log(f'[info] ▶ {self.screen_name} is open')
         return (self.get_unique_element()).is_displayed()
 
-    def screen_is_enabled(self):
+    def check_screen_is_enabled(self):
         Logger.log(f'[info] ▶ {self.screen_name} is enable')
         return (self.get_unique_element()).is_enabled()
     
