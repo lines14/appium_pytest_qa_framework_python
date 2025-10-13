@@ -42,11 +42,11 @@ class BaseElement:
         return attr_value
 
     def check_element_is_displayed(self):
-        Logger.log(f'[info] ▶ {self.element_name} is present')
+        Logger.log(f'[info] ▶ check {self.element_name} is displayed')
         return (self.get_element()).is_displayed()
 
     def check_element_is_enabled(self):
-        Logger.log(f'[info] ▶ {self.element_name} is enable')
+        Logger.log(f'[info] ▶ check {self.element_name} is enabled')
         return (self.get_element()).is_enabled()
 
     def parse_children_for_attr(self, attr):
@@ -64,9 +64,9 @@ class BaseElement:
         WaitUtils.wait_element_visible(self.locator_type, self.element_locator)
 
     def wait_staleness_of_element(self):
+        Logger.log(f'[info] ▶ wait staleness of {self.element_name}')
         WaitUtils.wait_element_staleness_of(self.locator_type, self.element_locator)
     
     def wait_element_is_clickable(self):
         Logger.log(f'[info] ▶ wait {self.element_name} is clickable')
         WaitUtils.wait_element_clickable(self.locator_type, self.element_locator)
-        
