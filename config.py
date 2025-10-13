@@ -22,9 +22,11 @@ class Config(BaseSettings):
     DEVICE_NAME: str
     AUTOMATION_NAME: str
     NO_RESET: bool
+    FULL_RESET: bool
     NEW_COMMAND_TIMEOUT: int
     CONNECT_HARDWARE_KEYBOARD: bool
     AUTO_WEBVIEW: bool
+    AUTO_GRANT_PERMISSIONS: bool
 
     APP_PACKAGE: str
     APP_ACTIVITY: str
@@ -82,9 +84,9 @@ class Config(BaseSettings):
             nativeWebScreenshot=self.NATIVE_WEB_SCREENSHOT
         )
 
-        # setattr(instance, "appium:autoGrantPermissions", True)
-        # setattr(instance, "appium:fullReset", False)
+        setattr(instance, "appium:fullReset", self.FULL_RESET)
         setattr(instance, 'appium:autoWebview', self.AUTO_WEBVIEW)
+        setattr(instance, "appium:autoGrantPermissions", self.AUTO_GRANT_PERMISSIONS)
         setattr(instance, 'appium:chromedriverAutodownload', self.CHROMEDRIVER_AUTODOWNLOAD)
         return instance
 
@@ -110,6 +112,7 @@ class Config(BaseSettings):
             showXcodeLog=self.SHOW_XCODE_LOG
         )
 
-        # setattr(instance, "appium:fullReset", True)
+        setattr(instance, "appium:fullReset", self.FULL_RESET)
         setattr(instance, 'appium:autoWebview', self.AUTO_WEBVIEW)
+        setattr(instance, "appium:autoGrantPermissions", self.AUTO_GRANT_PERMISSIONS)
         return instance
