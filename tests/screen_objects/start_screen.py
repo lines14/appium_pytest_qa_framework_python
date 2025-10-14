@@ -4,15 +4,13 @@ from main.elements.base_elements.button import Button
 
 class StartScreen(BaseScreen):
     def __init__(self):
-        super().__init__(AppiumBy.XPATH, '//android.widget.Button[@text="Вход"]', 'start screen')
+        super().__init__(AppiumBy.XPATH, '//android.widget.TextView[contains(@text, "Добро пожаловать")]', 'start screen')
         self.login_button = Button(AppiumBy.XPATH, '//android.widget.Button[@text="Вход"]', 'login button')
-        self.by_email_button = Button(AppiumBy.XPATH, '//android.widget.Button[@text="По email"]', 'by email button')
-    
+        self.by_email_button = Button(AppiumBy.XPATH, "//button[contains(., 'По email')]", 'by email button')
+
     def click_login_button(self):
         self.login_button.click_button()
-
-    def wait_by_email_button_visible(self):
-        self.by_email_button.wait_element_is_visible()
     
     def click_by_email_button(self):
+        self.by_email_button.wait_element_is_visible()
         self.by_email_button.click_button()

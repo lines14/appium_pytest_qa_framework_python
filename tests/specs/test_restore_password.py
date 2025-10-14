@@ -12,9 +12,10 @@ class TestRestorePassword:
 
         start_screen.wait_screen_is_visible()
         start_screen.click_login_button()
-        start_screen.wait_by_email_button_visible()
+        DriverUtils.switch_to_webview_context()
         start_screen.click_by_email_button()
 
+        DriverUtils.switch_to_native_context()
         login_screen.wait_screen_is_visible()
         login_screen.click_forgot_password_button()
 

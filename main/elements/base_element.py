@@ -2,6 +2,7 @@ from main.utils.log.logger import Logger
 from selenium.webdriver.common.keys import Keys
 from main.utils.wait.wait_utils import WaitUtils
 from main.driver.driver_factory import DriverFactory
+from appium.webdriver.common.appiumby import AppiumBy
 
 class BaseElement:
     def __init__(self, locator_type, element_locator, element_name):
@@ -10,7 +11,11 @@ class BaseElement:
         self.element_name = element_name
 
     def get_element(self):
-        return DriverFactory.instance.find_element(self.locator_type, self.element_locator)
+        if self.locator_type == AppiumBy.ANDROID_UIAUTOMATOR:
+            element_locator = f'new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView({self.element_locator})'
+            return DriverFactory.instance.find_element(self.locator_type, element_locator)
+        else:
+            return DriverFactory.instance.find_element(self.locator_type, self.element_locator)
 
     def get_elements(self):
         return DriverFactory.instance.find_elements(self.locator_type, self.element_locator)
@@ -24,6 +29,9 @@ class BaseElement:
     def click_button(self):
         Logger.log(f'[info] ▶ click {self.element_name}')
         (self.get_element()).click()
+
+    def tap(self):
+        DriverFactory.instance.execute_script("mobile: clickGesture", {"elementId": (self.get_element()).id})
 
     def input_text(self, text):
         Logger.log(f'[info] ▶ input {self.element_name}')

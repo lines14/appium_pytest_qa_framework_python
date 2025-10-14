@@ -1,17 +1,12 @@
 from main.utils.log.logger import Logger
 from main.utils.wait.wait_utils import WaitUtils
 from main.driver.driver_factory import DriverFactory
-from appium.webdriver.common.touch_action import TouchAction
 
 class DriverUtils:
     @staticmethod
     def init_the_driver():
         Logger.log('[info] ▶ init driver')
         DriverFactory.init_instance()
-
-    @staticmethod
-    def scroll_to_the_bottom_in_webview():
-        DriverFactory.instance.execute_script('window.scrollBy(0, document.body.scrollHeight);')
 
     @staticmethod
     def handle_original_tab_in_webview():
@@ -78,11 +73,6 @@ class DriverUtils:
     def close_tab_in_webview():
         Logger.log('[info] ▶ close tab')
         DriverFactory.instance.close()
-
-    @staticmethod
-    def tap(self):
-        Logger.log(f'[info] ▶ tap {self.element_name}')
-        TouchAction(DriverFactory.instance).tap(self.get_element()).perform()
 
     @staticmethod
     def get_context(substr):

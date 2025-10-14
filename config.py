@@ -9,8 +9,11 @@ class Config(BaseSettings):
     DB_PORT: int
     DB_NAME: str
 
+    ADB_PATH: str
     APPIUM_HOST: str
     APPIUM_PORT: int
+    EMULATOR_HOST: str
+    EMULATOR_PORT: int
 
     AUTH_LOGIN: str
     AUTH_PASSWORD: str
@@ -27,6 +30,7 @@ class Config(BaseSettings):
     CONNECT_HARDWARE_KEYBOARD: bool
     AUTO_WEBVIEW: bool
     AUTO_GRANT_PERMISSIONS: bool
+    SETTINGS_WAIT_TIMEOUT: int
 
     APP_PACKAGE: str
     APP_ACTIVITY: str
@@ -36,7 +40,6 @@ class Config(BaseSettings):
 
     PLATFORM_VERSION: str
     BUNDLE_ID: str
-    UDID: str
     USE_NEW_WDA: bool
     WDA_LAUNCH_TIMEOUT: int
     WDA_CONNECTION_TIMEOUT: int
@@ -61,6 +64,11 @@ class Config(BaseSettings):
         return f"http://{self.APPIUM_HOST}:{self.APPIUM_PORT}"
 
     @property
+    def UDID(self) -> str:
+        return f"{self.EMULATOR_HOST}:{self.EMULATOR_PORT}"
+        # return self.DEVICE_NAME
+
+    @property
     def USER(self):
         return SimpleNamespace(
             login=self.AUTH_LOGIN,
@@ -70,13 +78,13 @@ class Config(BaseSettings):
     @property
     def ANDROID_CAPABILITIES(self):
         instance = SimpleNamespace(
+            udid=self.UDID,
             app=self.APP,
             platformName=self.PLATFORM_NAME,
             deviceName=self.DEVICE_NAME,
             automationName=self.AUTOMATION_NAME,
             noReset=self.NO_RESET,
             newCommandTimeout=self.NEW_COMMAND_TIMEOUT,
-            connectHardwareKeyboard=self.CONNECT_HARDWARE_KEYBOARD,
         
             appPackage=self.APP_PACKAGE,
             appActivity=self.APP_ACTIVITY,
@@ -84,26 +92,28 @@ class Config(BaseSettings):
             nativeWebScreenshot=self.NATIVE_WEB_SCREENSHOT
         )
 
+        setattr(instance, "ignoreHiddenApiPolicyError", True)
         setattr(instance, "appium:fullReset", self.FULL_RESET)
         setattr(instance, 'appium:autoWebview', self.AUTO_WEBVIEW)
+        setattr(instance, "appium:settings[waitTimeout]", self.SETTINGS_WAIT_TIMEOUT)
         setattr(instance, "appium:autoGrantPermissions", self.AUTO_GRANT_PERMISSIONS)
-        setattr(instance, 'appium:chromedriverAutodownload', self.CHROMEDRIVER_AUTODOWNLOAD)
+        setattr(instance, 'appium:connectHardwareKeyboard', self.CONNECT_HARDWARE_KEYBOARD)
+        setattr(instance, 'appium:chromedriver_autodownload', self.CHROMEDRIVER_AUTODOWNLOAD)
         return instance
 
     @property
     def IOS_CAPABILITIES(self):
         instance = SimpleNamespace(
+            udid=self.UDID,
             app=self.APP,
             platformName=self.PLATFORM_NAME,
             deviceName=self.DEVICE_NAME,
             automationName=self.AUTOMATION_NAME,
             noReset=self.NO_RESET,
             newCommandTimeout=self.NEW_COMMAND_TIMEOUT,
-            connectHardwareKeyboard=self.CONNECT_HARDWARE_KEYBOARD,
         
             platformVersion=self.PLATFORM_VERSION,
             bundleId=self.BUNDLE_ID,
-            udid=self.UDID,
             useNewWDA=self.USE_NEW_WDA,
             wdaLaunchTimeout=self.WDA_LAUNCH_TIMEOUT,
             wdaConnectionTimeout=self.WDA_CONNECTION_TIMEOUT,
@@ -114,5 +124,7 @@ class Config(BaseSettings):
 
         setattr(instance, "appium:fullReset", self.FULL_RESET)
         setattr(instance, 'appium:autoWebview', self.AUTO_WEBVIEW)
+        setattr(instance, "appium:settings[waitTimeout]", self.SETTINGS_WAIT_TIMEOUT)
         setattr(instance, "appium:autoGrantPermissions", self.AUTO_GRANT_PERMISSIONS)
+        setattr(instance, 'appium:connectHardwareKeyboard', self.CONNECT_HARDWARE_KEYBOARD)
         return instance
