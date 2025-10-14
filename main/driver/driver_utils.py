@@ -42,24 +42,24 @@ class DriverUtils:
     @classmethod
     def get_alert_text_in_webview(cls):
         Logger.log('[info] ▶ alert with text is open')
-        text = (cls.get_alert()).text
+        text = (cls.get_alert_in_webview()).text
         Logger.log(f'[info]   text contains: "{text}"')
         return text
 
     @classmethod
     def enter_text_to_alert_in_webview(cls, text):
         Logger.log('[info] ▶ input text to alert form')
-        (cls.get_alert()).send_keys(text)
+        (cls.get_alert_in_webview()).send_keys(text)
 
     @classmethod
     def accept_alert_in_webview(cls):
         Logger.log('[info] ▶ accept alert')
-        (cls.get_alert()).accept()
+        (cls.get_alert_in_webview()).accept()
 
     @classmethod
     def alert_is_displayed_in_webview(cls):
         try:
-            cls.get_alert()
+            cls.get_alert_in_webview()
             return True
         except:
             return False
@@ -83,6 +83,18 @@ class DriverUtils:
     def tap(self):
         Logger.log(f'[info] ▶ tap {self.element_name}')
         TouchAction(DriverFactory.instance).tap(self.get_element()).perform()
+
+    @staticmethod
+    def get_context(substr):
+        return next(ctx for ctx in DriverFactory.instance.contexts if substr in ctx)
+
+    @classmethod
+    def switch_to_webview_context(cls):
+        DriverFactory.instance.switch_to.context(cls.get_context('WEBVIEW'))
+
+    @classmethod
+    def switch_to_native_context(cls):
+        DriverFactory.instance.switch_to.context(cls.get_context('NATIVE_APP'))
     
     @staticmethod
     def quit_driver():
