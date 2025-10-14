@@ -22,8 +22,8 @@ class Config(BaseSettings):
 
     APP: str
     PLATFORM_NAME: str
-    DEVICE_NAME: str
     AUTOMATION_NAME: str
+    DEVICE_NAME: str
     NO_RESET: bool
     FULL_RESET: bool
     NEW_COMMAND_TIMEOUT: int
@@ -31,6 +31,7 @@ class Config(BaseSettings):
     AUTO_WEBVIEW: bool
     AUTO_GRANT_PERMISSIONS: bool
     SETTINGS_WAIT_TIMEOUT: int
+    IGNORE_HIDDEN_API_POLICY_ERROR: bool
 
     APP_PACKAGE: str
     APP_ACTIVITY: str
@@ -81,10 +82,11 @@ class Config(BaseSettings):
             udid=self.UDID,
             app=self.APP,
             platformName=self.PLATFORM_NAME,
-            deviceName=self.DEVICE_NAME,
+            deviceName=self.UDID,
             automationName=self.AUTOMATION_NAME,
             noReset=self.NO_RESET,
             newCommandTimeout=self.NEW_COMMAND_TIMEOUT,
+            ignoreHiddenApiPolicyError=self.IGNORE_HIDDEN_API_POLICY_ERROR,
         
             appPackage=self.APP_PACKAGE,
             appActivity=self.APP_ACTIVITY,
@@ -92,7 +94,6 @@ class Config(BaseSettings):
             nativeWebScreenshot=self.NATIVE_WEB_SCREENSHOT
         )
 
-        setattr(instance, "ignoreHiddenApiPolicyError", True)
         setattr(instance, "appium:fullReset", self.FULL_RESET)
         setattr(instance, 'appium:autoWebview', self.AUTO_WEBVIEW)
         setattr(instance, "appium:settings[waitTimeout]", self.SETTINGS_WAIT_TIMEOUT)
@@ -107,10 +108,11 @@ class Config(BaseSettings):
             udid=self.UDID,
             app=self.APP,
             platformName=self.PLATFORM_NAME,
-            deviceName=self.DEVICE_NAME,
+            deviceName=self.UDID,
             automationName=self.AUTOMATION_NAME,
             noReset=self.NO_RESET,
             newCommandTimeout=self.NEW_COMMAND_TIMEOUT,
+            ignoreHiddenApiPolicyError=self.IGNORE_HIDDEN_API_POLICY_ERROR,
         
             platformVersion=self.PLATFORM_VERSION,
             bundleId=self.BUNDLE_ID,

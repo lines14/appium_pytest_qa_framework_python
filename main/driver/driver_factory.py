@@ -14,13 +14,13 @@ class DriverFactory(classutilities.ClassPropertiesMixin):
         if cls.__instance is None:
             with cls.__lock:
                 if cls.__instance is None:
-                    # from main.utils.wait.wait_utils import WaitUtils
+                    from main.utils.wait.wait_utils import WaitUtils
                     options = AppiumOptions()
                     
                     if Config().PLATFORM_NAME == 'Android':
-                        # WaitUtils.wait_adb_device()
-                        # WaitUtils.wait_activity_manager_ready()
-                        # WaitUtils.wait_android_emulator_ready()
+                        WaitUtils.wait_adb_device()
+                        WaitUtils.wait_activity_manager_ready()
+                        WaitUtils.wait_android_emulator_ready()
                         
                         options.load_capabilities(DataUtils.model_to_dict(Config().ANDROID_CAPABILITIES))
                     elif Config().PLATFORM_NAME == 'iOS':
