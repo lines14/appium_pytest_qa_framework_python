@@ -1,6 +1,6 @@
 Appium-Python-Client==3.2.1
-selenium==4.23.0
-pytest==8.0.0
+selenium==4.36.0
+pytest==8.4.0
 classutilities==0.2.1
 pytest_assertions==0.5.0
 pytest-asyncio==1.2.0
