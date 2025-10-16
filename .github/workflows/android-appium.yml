@@ -48,7 +48,6 @@ jobs:
           npm install -g appium@next
           appium driver install uiautomator2
           npm install -g appium-chromedriver
-          appium --version
 
       - name: Run Android emulator and Appium tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -59,15 +58,4 @@ jobs:
           emulator-options: -no-snapshot-load -no-snapshot-save -no-boot-anim -no-audio -memory 4096 -port 5554 -wipe-data -feature -Vulkan -gpu host -accel on -no-metrics -writable-system -verbose -skin 440x960 -gpu swiftshader_indirect -feature BluetoothEmulation=off -no-window
           emulator-boot-timeout: 300
           script: |
-            echo "Emulator started ✅"
-
-            # 🟩 Проверяем путь до ADB
-            echo "ANDROID_HOME=$ANDROID_HOME"
-            ls -la $ANDROID_HOME/platform-tools || echo "platform-tools not found!"
-            $ANDROID_HOME/platform-tools/adb version || echo "ADB not found!"
-
-            # 🟩 Проверим, что эмулятор доступен по ADB
-            $ANDROID_HOME/platform-tools/adb devices
-
-            # 🟩 Запуск тестов
             pytest -s

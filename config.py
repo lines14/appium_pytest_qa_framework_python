@@ -1,5 +1,7 @@
 import os
+import subprocess
 from types import SimpleNamespace
+from main.utils.data.data_utils import DataUtils
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Config(BaseSettings):
@@ -9,7 +11,6 @@ class Config(BaseSettings):
     DB_PORT: int
     DB_NAME: str
 
-    ADB_PATH: str
     APPIUM_HOST: str
     APPIUM_PORT: int
     EMULATOR_HOST: str
@@ -59,6 +60,13 @@ class Config(BaseSettings):
     def DB_URL_SYNC(self) -> str:
         return (f"mysql+pymysql://{self.DB_USERNAME}:{self.DB_PASSWORD}@"
                 f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}")
+    
+    @property
+    def ADB_PATH(self) -> str:
+        return os.path.join(
+            DataUtils.dict_to_model(dict(os.environ)).ANDROID_HOME, 
+            "platform-tools/adb"
+        )
     
     @property
     def APPIUM_URL(self) -> str:
