@@ -54,5 +54,16 @@ jobs:
           script: |
             echo "Starting Appium server..."
             appium --allow-insecure="*:chromedriver_autodownload" --allow-cors --log-level info &
+            
+            echo "Waiting for emulator to boot..."
+            adb wait-for-device
+            BOOT_COMPLETED=""
+            until [ "$BOOT_COMPLETED" = "1" ]; do
+              sleep 5
+              BOOT_COMPLETED=$(adb -s emulator-5554 shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+              echo "Boot status: $BOOT_COMPLETED"
+            done
+            echo "Emulator is ready!"
+
             echo "Running Python Appium tests..."
             pytest -s
