@@ -1,0 +1,54 @@
+name: Android Appium Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  android-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download APK from Google Drive
+        env:
+          FILE_ID: ${{ secrets.GDRIVE_FILE_ID }}
+        run: |
+          gdown https://drive.google.com/uc?id=${FILE_ID} -O app-debug.apk
+          file app-debug.apk
+          unzip -t app-debug.apk || true
+
+      - name: Setup Node.js and Appium
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: |
+          npm install -g appium@next
+          appium driver install uiautomator2
+          npm install -g appium-chromedriver
+          appium --version
+
+      - name: Run Android emulator and Appium tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          script: |
+            echo "Starting Appium server..."
+            appium --allow-insecure="*:chromedriver_autodownload" --allow-cors --log-level info &
+            echo "Running Python Appium tests..."
+            pytest -s
