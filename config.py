@@ -64,10 +64,11 @@ class Config(BaseSettings):
     def APPIUM_URL(self) -> str:
         return f"http://{self.APPIUM_HOST}:{self.APPIUM_PORT}"
 
+    # change if custom ADB connection
     @property
     def UDID(self) -> str:
-        return f"{self.EMULATOR_HOST}:{self.EMULATOR_PORT}"
-        # return self.DEVICE_NAME
+        # return f"{self.EMULATOR_HOST}:{self.EMULATOR_PORT}"
+        return self.DEVICE_NAME
 
     @property
     def USER(self):
