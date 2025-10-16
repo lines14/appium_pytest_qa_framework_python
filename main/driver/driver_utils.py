@@ -5,7 +5,7 @@ from main.driver.driver_factory import DriverFactory
 class DriverUtils:
     @staticmethod
     def init_the_driver():
-        Logger.log('[info] ▶ init driver')
+        Logger.log('[inf] ▶ init driver')
         DriverFactory.init_instance()
 
     @staticmethod
@@ -18,7 +18,7 @@ class DriverUtils:
 
     @staticmethod
     def switch_driver_to_another_tab_in_webview(prev_tabs_list, original_window):
-        Logger.log(f'[info] ▶ switch driver to another tab')
+        Logger.log(f'[inf] ▶ switch driver to another tab')
         WaitUtils.wait_new_window_is_opened_in_webview(prev_tabs_list)
         for window_handle in DriverFactory.instance.window_handles:
             if window_handle != original_window:
@@ -27,7 +27,7 @@ class DriverUtils:
 
     @staticmethod
     def switch_driver_to_original_tab_in_webview(original_tab):
-        Logger.log('[info] ▶ switch driver to previous tab')
+        Logger.log('[inf] ▶ switch driver to previous tab')
         DriverFactory.instance.switch_to.window(original_tab)
 
     @staticmethod
@@ -36,19 +36,19 @@ class DriverUtils:
 
     @classmethod
     def get_alert_text_in_webview(cls):
-        Logger.log('[info] ▶ alert with text is open')
+        Logger.log('[inf] ▶ alert with text is open')
         text = (cls.get_alert_in_webview()).text
-        Logger.log(f'[info]   text contains: "{text}"')
+        Logger.log(f'[inf]   text contains: "{text}"')
         return text
 
     @classmethod
     def enter_text_to_alert_in_webview(cls, text):
-        Logger.log('[info] ▶ input text to alert form')
+        Logger.log('[inf] ▶ input text to alert form')
         (cls.get_alert_in_webview()).send_keys(text)
 
     @classmethod
     def accept_alert_in_webview(cls):
-        Logger.log('[info] ▶ accept alert')
+        Logger.log('[inf] ▶ accept alert')
         (cls.get_alert_in_webview()).accept()
 
     @classmethod
@@ -61,17 +61,17 @@ class DriverUtils:
 
     @staticmethod
     def go_into_frame_in_webview(id_or_index):
-        Logger.log('[info] ▶ go into frame')
+        Logger.log('[inf] ▶ go into frame')
         DriverFactory.instance.switch_to.frame(id_or_index)
 
     @staticmethod
     def go_out_of_frame_in_webview():
-        Logger.log('[info] ▶ go out of frame')
+        Logger.log('[inf] ▶ go out of frame')
         DriverFactory.instance.switch_to.default_content()
 
     @staticmethod
     def close_tab_in_webview():
-        Logger.log('[info] ▶ close tab')
+        Logger.log('[inf] ▶ close tab')
         DriverFactory.instance.close()
 
     @staticmethod
@@ -88,6 +88,6 @@ class DriverUtils:
     
     @staticmethod
     def quit_driver():
-        Logger.log('[info] ▶ quit driver')
+        Logger.log('[inf] ▶ quit driver')
         DriverFactory.instance.quit()
         DriverFactory.instance = None
