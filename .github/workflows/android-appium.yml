@@ -7,19 +7,13 @@ on:
 
 jobs:
   android-tests:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 30
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          
       - name: Restore .env file
         run: |
           echo "${{ secrets.ENV_FILE_BASE64 }}" | base64 -d > .env
@@ -57,7 +51,7 @@ jobs:
           target: google_apis
           arch: x86_64
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -accel off
-          emulator-boot-timeout: 300   # ждем до 5 минут
+          emulator-boot-timeout: 300
           script: |
             echo "Emulator started"
             pytest -s
