@@ -45,7 +45,7 @@ jobs:
           appium --version
 
       - name: Run Android emulator and Appium tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator:latest
         with:
           api-level: 34
           target: google_apis
