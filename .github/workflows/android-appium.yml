@@ -9,7 +9,10 @@ jobs:
   android-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
+    strategy:
+      matrix:
+        api-level: [34]
+        target: [google_apis]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -49,21 +52,44 @@ jobs:
           appium driver install uiautomator2
           npm install -g appium-chromedriver
 
-      - name: Run Android emulator and Appium tests
+      - name: Generate AVD snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
-          target: google_apis
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           arch: x86_64
           # ram-size: 2048M
           # disk-size: 4096M
           # profile: pixel_5
           # avd-name: test-emulator
           # disable-animations: true
+          force-avd-creation: false
+          emulator-options: -no-snapshot-load -no-snapshot-save -no-boot-anim -no-audio -memory 4096 -port 5554 -wipe-data -feature -Vulkan -gpu host -accel on -no-metrics -writable-system -verbose -skin 440x960 -gpu swiftshader_indirect -feature BluetoothEmulation=off -no-window
+          emulator-boot-timeout: 300
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Run Android emulator and Appium tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          arch: x86_64
+          # ram-size: 2048M
+          # disk-size: 4096M
+          # profile: pixel_5
+          # avd-name: test-emulator
+          # disable-animations: true
+          force-avd-creation: false
           emulator-options: -no-snapshot-load -no-snapshot-save -no-boot-anim -no-audio -memory 4096 -port 5554 -wipe-data -feature -Vulkan -gpu host -accel on -no-metrics -writable-system -verbose -skin 440x960 -gpu swiftshader_indirect -feature BluetoothEmulation=off -no-window
           emulator-boot-timeout: 300
           script: |
             appium --allow-insecure="*:chromedriver_autodownload" --allow-cors --log-level info &
-            APPIUM_PID=$!
             pytest -s
-            kill $APPIUM_PID || true
+
+      - name: Kill crashpad_handler processes
+        if: always()
+        run: |
+          pkill -SIGTERM crashpad_handler || true
+          sleep 5
+          pkill -SIGKILL crashpad_handler || true
