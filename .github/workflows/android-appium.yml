@@ -60,13 +60,10 @@ jobs:
           # profile: pixel_5
           # avd-name: test-emulator
           # disable-animations: true
-          # cmake: 3.10.2.4988404
           emulator-options: -no-snapshot-load -no-snapshot-save -no-boot-anim -no-audio -memory 4096 -port 5554 -wipe-data -feature -Vulkan -gpu host -accel on -no-metrics -writable-system -verbose -skin 440x960 -gpu swiftshader_indirect -feature BluetoothEmulation=off -no-window
           emulator-boot-timeout: 300
           script: |
-            adb wait-for-device
-            adb shell input keyevent 82
-            adb shell pm list instrumentation
-            adb devices && adb shell getprop
             appium --allow-insecure="*:chromedriver_autodownload" --allow-cors --log-level info &
+            APPIUM_PID=$!
             pytest -s
+            kill $APPIUM_PID || true
