@@ -1,6 +1,7 @@
 import os
-import subprocess
+from typing import Optional
 from types import SimpleNamespace
+from pydantic import model_validator
 from main.utils.data.data_utils import DataUtils
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -11,6 +12,7 @@ class Config(BaseSettings):
     DB_PORT: int
     DB_NAME: str
 
+    ADB_PATH: Optional[str] = None
     APPIUM_HOST: str
     APPIUM_PORT: int
     EMULATOR_HOST: str
@@ -60,13 +62,6 @@ class Config(BaseSettings):
     def DB_URL_SYNC(self) -> str:
         return (f"mysql+pymysql://{self.DB_USERNAME}:{self.DB_PASSWORD}@"
                 f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}")
-    
-    @property
-    def ADB_PATH(self) -> str:
-        return os.path.join(
-            DataUtils.dict_to_model(dict(os.environ)).ANDROID_HOME, 
-            "platform-tools/adb"
-        )
     
     @property
     def APPIUM_URL(self) -> str:
@@ -139,3 +134,13 @@ class Config(BaseSettings):
         setattr(instance, "appium:autoGrantPermissions", self.AUTO_GRANT_PERMISSIONS)
         setattr(instance, 'appium:connectHardwareKeyboard', self.CONNECT_HARDWARE_KEYBOARD)
         return instance
+
+    @model_validator(mode="after")
+    def fill_adb_path(self):
+        if not self.ADB_PATH:
+            self.ADB_PATH = os.path.join(
+                DataUtils.dict_to_model(dict(os.environ)).ANDROID_HOME, 
+                "platform-tools/adb"
+            )
+            
+        return self
