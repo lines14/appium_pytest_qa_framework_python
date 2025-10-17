@@ -61,6 +61,3 @@ jobs:
           script: |
             appium --allow-insecure="*:chromedriver_autodownload" --allow-cors --log-level info &
             pytest -s
-            TEST_EXIT_CODE=$?
-            pkill -9 -f "qemu-system" || true
-            exit $TEST_EXIT_CODE
