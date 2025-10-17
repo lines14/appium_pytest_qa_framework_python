@@ -60,8 +60,6 @@ jobs:
           script: |
             appium --allow-insecure="*:chromedriver_autodownload" --allow-cors --log-level info &
             pytest -s
-
-      - name: Force Emulator Cleanup to Prevent Hang
-        if: always()
-        run: |
-          pkill -9 -f "qemu-system" || true
+            TEST_EXIT_CODE=$?            
+            pkill -9 -f "qemu-system" || true
+            exit $TEST_EXIT_CODE
