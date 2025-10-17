@@ -19,7 +19,7 @@ async def setup_and_teardown():
     if system_alerts.system_alert_close_button_is_displayed():
         system_alerts.click_system_alert_close_button()
 
-    # yield DriverFactory.instance
+    yield DriverFactory.instance
 
     DriverUtils.quit_driver()
     # await base_DB.dispose_engine()
