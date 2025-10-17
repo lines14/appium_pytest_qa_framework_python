@@ -49,11 +49,11 @@ class BaseElement:
         Logger.log(f'[inf]   attribute value is: "{attr_value}"')
         return attr_value
 
-    def check_element_is_displayed(self):
+    def element_is_displayed(self):
         Logger.log(f'[inf] ▶ check {self.element_name} is displayed')
         return (self.get_element()).is_displayed()
 
-    def check_element_is_enabled(self):
+    def element_is_enabled(self):
         Logger.log(f'[inf] ▶ check {self.element_name} is enabled')
         return (self.get_element()).is_enabled()
 

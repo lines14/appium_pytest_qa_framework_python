@@ -8,4 +8,4 @@ class ForgotPasswordScreen(BaseScreen):
         self.send_code_button = Button(AppiumBy.XPATH, '//button[contains(., "Выслать код")]', 'send code button')
 
     def send_code_button_is_enabled(self):
-        self.send_code_button.check_element_is_enabled()
+        self.send_code_button.element_is_enabled()
