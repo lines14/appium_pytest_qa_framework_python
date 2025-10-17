@@ -83,4 +83,6 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-load -no-snapshot-save -no-boot-anim -no-audio -memory 4096 -port 5554 -wipe-data -feature -Vulkan -gpu host -accel on -no-metrics -writable-system -verbose -skin 440x960 -gpu swiftshader_indirect -feature BluetoothEmulation=off -no-window
           emulator-boot-timeout: 300
-          script: ./e2e_tests.sh
+          script: |
+            chmod +x ./e2e_tests.sh
+            ./e2e_tests.sh
