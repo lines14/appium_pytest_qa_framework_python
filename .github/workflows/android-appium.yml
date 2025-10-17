@@ -52,7 +52,7 @@ jobs:
       - name: Run Android emulator and Appium tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 30
+          api-level: 34
           target: google_apis
           arch: x86_64
           emulator-options: -no-snapshot-load -no-snapshot-save -no-boot-anim -no-audio -memory 4096 -port 5554 -wipe-data -feature -Vulkan -gpu host -accel on -no-metrics -writable-system -verbose -skin 440x960 -gpu swiftshader_indirect -feature BluetoothEmulation=off -no-window
