@@ -83,13 +83,4 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-load -no-snapshot-save -no-boot-anim -no-audio -memory 4096 -port 5554 -wipe-data -feature -Vulkan -gpu host -accel on -no-metrics -writable-system -verbose -skin 440x960 -gpu swiftshader_indirect -feature BluetoothEmulation=off -no-window
           emulator-boot-timeout: 300
-          script: |
-            appium --allow-insecure="*:chromedriver_autodownload" --allow-cors --log-level info &
-            pytest -s
-
-      - name: Kill crashpad_handler processes
-        if: always()
-        run: |
-          pkill -SIGTERM crashpad_handler || true
-          sleep 5
-          pkill -SIGKILL crashpad_handler || true
+          script: e2e_tests.sh
