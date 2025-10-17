@@ -16,8 +16,8 @@ async def setup_and_teardown():
     await AuthAPI().set_token()
     DriverUtils.init_the_driver()
 
-    if system_alerts.system_alert_close_button_is_displayed():
-        system_alerts.click_system_alert_close_button()
+    # if system_alerts.system_alert_close_button_is_displayed():
+        # system_alerts.click_system_alert_close_button()
 
     yield DriverFactory.instance
 
