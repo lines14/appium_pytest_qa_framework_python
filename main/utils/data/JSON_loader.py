@@ -4,6 +4,9 @@ from main.utils.data.data_utils import DataUtils
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 class JSONLoader:      
+    with open('../../../resources/config_data.json', 'r', encoding='utf-8') as data:
+        config_data = DataUtils.dict_to_model(json.loads(data.read()))
+
     with open('../../../resources/test_data.json', 'r', encoding='utf-8') as data:
         test_data = DataUtils.dict_to_model(json.loads(data.read()))
         

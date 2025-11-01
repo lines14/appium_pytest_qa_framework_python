@@ -1,0 +1,65 @@
+stages:
+  - build-appium-server-with-android-emulator
+  - tests
+
+build-appium-server-with-android-emulator:
+  stage: build-appium-server-with-android-emulator
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
+  tags:
+    - lines14-runner
+  only:
+    - dev
+  before_script:
+    - apk update && apk add --no-cache curl jq
+    - docker login --username "$USER" --password "$PASS" registry.gitlab.com
+  script:
+    - |
+      export IMAGE_TAG="cmdline-tools-${CMDLINE_TOOLS_VERSION}:api-level-${ANDROID_API_LEVEL}"
+      export REPO_NAME="cmdline-tools-${CMDLINE_TOOLS_VERSION}"
+
+      REPO_ID=$(curl --silent --header "PRIVATE-TOKEN: $TOKEN" \
+        "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/registry/repositories" \
+        | jq -r ".[] | select(.path | endswith(\"/$REPO_NAME\")) | .id")
+
+      if [ -n "$REPO_ID" ] && curl --silent --header "PRIVATE-TOKEN: $TOKEN" \
+          "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/registry/repositories/$REPO_ID/tags" \
+          | jq -r ".[].name" | grep -q "api-level-${ANDROID_API_LEVEL}"; then
+        echo "image $IMAGE_TAG already exists, skipping build"
+      else
+        docker build \
+          -f Dockerfile.appium-server-with-android-emulator \
+          --build-arg CMDLINE_TOOLS_VERSION=${CMDLINE_TOOLS_VERSION} \
+          --build-arg ANDROID_API_LEVEL=${ANDROID_API_LEVEL} \
+          -t "$DOCKER_ENV_CI_REGISTRY_IMAGE/$IMAGE_TAG" .
+        docker push "$DOCKER_ENV_CI_REGISTRY_IMAGE/$IMAGE_TAG"
+      fi
+
+tests:
+  stage: tests
+  image: "${CI_REGISTRY_IMAGE}/cmdline-tools-${CMDLINE_TOOLS_VERSION}:api-level-${ANDROID_API_LEVEL}"
+  only:
+    - dev
+  tags:
+    - lines14-runner
+  before_script:
+    - export ANDROID_HOME=/root/Android/Sdk
+    - export ANDROID_AVD_HOME=/root/.android/avd
+    - export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$PATH"
+  script:
+    - echo "${ENV_TEST}" | tr -d '\r' > ./.env.test
+    - appium --allow-insecure="*:chromedriver_autodownload" --allow-cors --log-level error &
+    - mkdir -p $ANDROID_AVD_HOME
+    - |
+      if [ ! -d "$ANDROID_AVD_HOME/test.avd" ]; then
+        echo no | avdmanager create avd --force -n test --abi "google_apis/x86_64" --package "system-images;android-${ANDROID_API_LEVEL};google_apis;x86_64"
+      fi
+    - $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-load -no-snapshot-save -no-boot-anim -no-audio -memory 4096 -wipe-data -feature Vulkan -feature BluetoothEmulation=off -gpu swiftshader_indirect -accel on -no-metrics -writable-system -verbose -skin 440x960 -no-window > emulator.log 2>&1 &
+    - adb wait-for-device
+    - adb devices
+    - pytest -s

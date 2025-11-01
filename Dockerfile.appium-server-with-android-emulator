@@ -1,0 +1,61 @@
+FROM node:latest
+
+ARG CMDLINE_TOOLS_VERSION
+ARG ANDROID_API_LEVEL
+
+WORKDIR /app
+COPY . .
+
+ENV ANDROID_HOME=/root/Android/Sdk
+ENV ANDROID_AVD_HOME=/root/.android/avd
+ENV PATH=${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/emulator:$PATH
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    python3.11-full \
+    unzip \
+    openjdk-17-jdk \
+    wget \
+    cpu-checker \
+    libpulse0 \
+    libpulse-mainloop-glib0 \
+    libx11-xcb1 \
+    libxcb1 \
+    libxcb-render0 \
+    libxcb-shm0 \
+    libxcb-xfixes0 \
+    libxrender1 \
+    libxrandr2 \
+    libxinerama1 \
+    libxkbcommon-x11-0 \
+    libglu1-mesa \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+RUN npm install -g appium@next \
+    && appium driver install uiautomator2 \
+    && npm install -g appium-chromedriver
+
+RUN mkdir -p ${ANDROID_HOME}/cmdline-tools \
+    && cd ${ANDROID_HOME}/cmdline-tools \
+    && wget https://dl.google.com/android/repository/commandlinetools-linux-${CMDLINE_TOOLS_VERSION}_latest.zip \
+    && unzip commandlinetools-linux-${CMDLINE_TOOLS_VERSION}_latest.zip \
+    && mv cmdline-tools latest \
+    && rm commandlinetools-linux-${CMDLINE_TOOLS_VERSION}_latest.zip
+
+RUN yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses \
+    && sdkmanager --sdk_root=$ANDROID_HOME --install 'build-tools;35.0.0' platform-tools "platforms;android-${ANDROID_API_LEVEL}" \
+    && sdkmanager --sdk_root=$ANDROID_HOME --install emulator --channel=0 \
+    && sdkmanager --sdk_root=$ANDROID_HOME --install "system-images;android-${ANDROID_API_LEVEL};google_apis;x86_64" --channel=0
+
+RUN mkdir -p $ANDROID_AVD_HOME \
+    && echo no | avdmanager create avd --force -n test --abi "google_apis/x86_64" --package "system-images;android-${ANDROID_API_LEVEL};google_apis;x86_64"
+
+RUN chown -R root:root /root/.android /root/Android/Sdk
+
+CMD ["/bin/bash"]
