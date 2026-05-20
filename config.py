@@ -51,7 +51,10 @@ class Config(BaseSettings):
     INCLUDE_SAFARI_IN_WEBVIEWS: bool
     SHOW_XCODE_LOG: bool
 
-    model_config = SettingsConfigDict(env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env.test"))
+    model_config = SettingsConfigDict(
+        env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env.test"),
+        extra='ignore'
+    )
 
     @property
     def DB_URL_ASYNC(self) -> str:
@@ -95,7 +98,8 @@ class Config(BaseSettings):
             appPackage=self.APP_PACKAGE,
             appActivity=self.APP_ACTIVITY,
             ensureWebviewsHavePages=self.ENSURE_WEBVIEWS_HAVE_PAGES,
-            nativeWebScreenshot=self.NATIVE_WEB_SCREENSHOT
+            nativeWebScreenshot=self.NATIVE_WEB_SCREENSHOT,
+            autoGrantPermissions=True
         )
 
         setattr(instance, "appium:fullReset", self.FULL_RESET)
