@@ -100,7 +100,8 @@ class Config(BaseSettings):
             appPackage=self.APP_PACKAGE,
             appActivity=self.APP_ACTIVITY,
             ensureWebviewsHavePages=self.ENSURE_WEBVIEWS_HAVE_PAGES,
-            nativeWebScreenshot=self.NATIVE_WEB_SCREENSHOT
+            nativeWebScreenshot=self.NATIVE_WEB_SCREENSHOT,
+            autoGrantPermissions=True
         )
 
         setattr(instance, "appium:fullReset", self.FULL_RESET)

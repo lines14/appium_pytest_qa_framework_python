@@ -12,3 +12,4 @@ PyMySQL==1.1.1
 aiomysql==0.2.0
 SQLAlchemy==2.0.32
 gdown==5.2.0
+greenlet==3.2.5
