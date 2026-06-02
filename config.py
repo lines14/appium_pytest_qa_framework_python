@@ -20,6 +20,8 @@ class Config(BaseSettings):
 
     AUTH_LOGIN: str
     AUTH_PASSWORD: str
+    APP_LOGIN: str
+    APP_PASSWORD: str
     API_BASE_URL: str
     WAIT_TIME: int
 
@@ -51,7 +53,10 @@ class Config(BaseSettings):
     INCLUDE_SAFARI_IN_WEBVIEWS: bool
     SHOW_XCODE_LOG: bool
 
-    model_config = SettingsConfigDict(env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env.test"))
+    model_config = SettingsConfigDict(
+        env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env.test"),
+        extra='ignore'
+    )
 
     @property
     def DB_URL_ASYNC(self) -> str:
