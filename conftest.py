@@ -10,11 +10,12 @@ from main.driver.driver_factory import DriverFactory
 @pytest.fixture(scope="function", autouse=True)
 async def setup_and_teardown():
     # base_DB = BaseDB()
-    system_alerts = SystemAlerts()
 
     # await base_DB.init_tables()
     await AuthAPI().set_token()
     DriverUtils.init_the_driver()
+
+    system_alerts = SystemAlerts()
 
     if system_alerts.system_alert_close_button_is_displayed():
         system_alerts.click_system_alert_close_button()

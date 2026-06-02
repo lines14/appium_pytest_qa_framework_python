@@ -20,6 +20,8 @@ class Config(BaseSettings):
 
     AUTH_LOGIN: str
     AUTH_PASSWORD: str
+    APP_LOGIN: str
+    APP_PASSWORD: str
     API_BASE_URL: str
     WAIT_TIME: int
 
