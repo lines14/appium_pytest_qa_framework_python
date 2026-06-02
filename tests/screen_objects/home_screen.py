@@ -15,7 +15,7 @@ class HomeScreen(BaseScreen):
         self.country = Button(AppiumBy.XPATH, '//android.widget.CheckBox[@text=" Германия"]', 'country checkbox')
         self.done_button = Button(AppiumBy.XPATH, '//android.widget.Button[@text="Готово"]', 'done button')
         self.trip_date = Button(AppiumBy.XPATH, '//android.widget.Button[@text="Выбрать"]', 'trip date button')
-        self.trip_date_calendar = Button(AppiumBy.XPATH, '//android.view.View[@text="1"])[2]', 'trip date calendar')
+        self.trip_date_calendar = Button(AppiumBy.XPATH, '(//android.view.View[@text="1"])[2]', 'trip date calendar')
         
 
     def create_new_policy(self):
@@ -34,6 +34,7 @@ class HomeScreen(BaseScreen):
     def pick_trip_date(self):
         self.trip_date.wait_element_is_visible()
         self.trip_date.click_button()
+        self.trip_date_calendar.wait_element_is_visible()
         self.trip_date_calendar.click_button()
 
 

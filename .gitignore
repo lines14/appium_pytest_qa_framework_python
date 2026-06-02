@@ -2,7 +2,6 @@
 .env.test
 .pytest_cache/
 **/__pycache__
-node_modules
+.venv
 venv
-package-lock.json
-package.json
+.vscode
